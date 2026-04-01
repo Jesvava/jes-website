@@ -26,7 +26,8 @@
   .panel-overlay.active .panel{transform:translateY(0) scale(1)}
   .panel-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text-soft);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
   .panel-close:hover{background:rgba(255,255,255,0.1);color:var(--text)}
-  .panel-icon{font-size:2.2rem;margin-bottom:0.75rem}.panel-title{font-family:'Silkscreen',cursive;font-size:1.25rem;margin-bottom:0.5rem}
+  .panel-icon{font-size:2.2rem;margin-bottom:0.75rem}
+  .panel-title{font-family:'Silkscreen',cursive;font-size:1.25rem;margin-bottom:0.5rem}
   .panel-desc{font-size:0.92rem;line-height:1.7;color:var(--text-soft);margin-bottom:1.5rem}
   .panel-tags{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem}
   .panel-tag{font-size:0.72rem;font-weight:600;padding:0.25rem 0.7rem;border-radius:100px;border:1px solid rgba(255,255,255,0.1);color:var(--text-soft)}
@@ -39,13 +40,19 @@
   .panel[data-color="blue"] .panel-title{color:var(--blue)}.panel[data-color="blue"] .panel-link{background:rgba(123,179,255,0.1);color:var(--blue)}
   .footer{text-align:center;padding:1.2rem;z-index:10}
   .social-row{display:flex;justify-content:center;gap:0.6rem;margin-bottom:0.5rem;flex-wrap:wrap}
-  .social-btn{font-family:'Silkscreen',cursive;font-size:0.6rem;padding:0.35rem 0.8rem;border-radius:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--text-soft);text-decoration:none;transition:all 0.2s}
+  .social-btn{font-family:'Silkscreen',cursive;font-size:0.6rem;padding:0.35rem 0.8rem;border-radius:6px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--text-soft);text-decoration:none;transition:all 0.2s;cursor:pointer;border:1px solid rgba(255,255,255,0.08)}
   .social-btn:hover{background:rgba(255,255,255,0.1);color:var(--warm);border-color:rgba(255,213,128,0.2)}
   .footer-copy{font-size:0.65rem;color:rgba(255,255,255,0.2)}
   .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .particle{position:absolute;background:rgba(255,213,128,0.2);border-radius:50%;animation:floatUp linear infinite}
   @keyframes floatUp{0%{transform:translateY(100vh);opacity:0}10%{opacity:1}90%{opacity:0.6}100%{transform:translateY(-10vh);opacity:0}}
   @keyframes plantWiggle{0%{transform:rotate(0)}25%{transform:rotate(-10deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+  .email-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel-bg);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:0.8rem 1.2rem;display:flex;align-items:center;gap:0.8rem;z-index:2000;opacity:0;pointer-events:none;transition:all 0.3s;font-size:0.85rem}
+  .email-toast.show{opacity:1;pointer-events:all;transform:translateX(-50%) translateY(0)}
+  .email-toast .addr{color:var(--warm);font-family:'Silkscreen',cursive;font-size:0.75rem}
+  .email-toast .copy-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--text);padding:0.3rem 0.8rem;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+  .email-toast .copy-btn:hover{background:rgba(255,255,255,0.15)}
+  .email-toast .copied{color:var(--teal);font-size:0.75rem;display:none}
   @media(max-width:750px){.room{transform:scale(0.6);transform-origin:top center}}
   @media(max-width:480px){.room{transform:scale(0.45);transform-origin:top center}}
 </style>
@@ -106,7 +113,7 @@
         </g>
       </g>
 
-      <!-- BOOKSHELF -->
+      <!-- BOOKSHELF (isometric, against left wall) -->
       <g data-click="mumble_note" data-tip="Mumble Note" data-tip-color="teal" transform="translate(148,395)">
         <polygon points="0,-95 -70,-60 -70,35 0,0" fill="#4E3A2A"/>
         <polygon points="-52,-51 -70,-60 -70,35 -52,44" fill="#52402E"/>
@@ -117,16 +124,19 @@
         <line x1="18" y1="-22.7" x2="-52" y2="12.3" stroke="#6B5240" stroke-width="1"/>
         <polygon points="0,-63.3 -70,-28.3 -52,-19.3 18,-54.3" fill="#7B6248" opacity="0.7"/>
         <line x1="18" y1="-54.3" x2="-52" y2="-19.3" stroke="#6B5240" stroke-width="1"/>
+        <!-- books bottom row -->
         <polygon points="14,9 6,13 6,-13 14,-17" fill="var(--coral)"/>
         <polygon points="5,13.5 -3,17.5 -3,-8.5 5,-12.5" fill="var(--blue)"/>
         <polygon points="-4,18 -12,22 -12,-4 -4,-8" fill="var(--violet)"/>
         <polygon points="-13,22.5 -21,26.5 -21,0.5 -13,-3.5" fill="var(--warm)"/>
         <polygon points="-22,27 -30,31 -30,5 -22,1" fill="var(--teal)"/>
         <polygon points="-31,31.5 -39,35.5 -39,9.5 -31,5.5" fill="var(--pink)"/>
+        <!-- books middle row -->
         <polygon points="14,-22.7 6,-18.7 6,-44.7 14,-48.7" fill="var(--teal)"/>
         <polygon points="4,-17.7 -4,-13.7 -4,-39.7 4,-43.7" fill="var(--coral)"/>
         <polygon points="-6,-12.7 -14,-8.7 -14,-34.7 -6,-38.7" fill="var(--amber)"/>
         <polygon points="-16,-7.7 -24,-3.7 -24,-29.7 -16,-33.7" fill="var(--blue)"/>
+        <!-- books top row -->
         <polygon points="14,-54.3 6,-50.3 6,-76.3 14,-80.3" fill="var(--violet)"/>
         <polygon points="4,-49.3 -4,-45.3 -4,-71.3 4,-75.3" fill="var(--warm)"/>
         <polygon points="-6,-44.3 -14,-40.3 -14,-66.3 -6,-70.3" fill="var(--pink)"/>
@@ -192,7 +202,7 @@
       <!-- Rug -->
       <ellipse cx="360" cy="455" rx="60" ry="25" fill="rgba(176,123,255,0.05)"/>
 
-      <!-- CAT -->
+      <!-- CAT (last = top layer) -->
       <g id="catGroup" data-action="cat" style="cursor:pointer;pointer-events:all" transform="translate(330,435)">
         <rect x="-8" y="-18" width="55" height="50" fill="transparent"/>
         <ellipse cx="15" cy="18" rx="14" ry="10" fill="#E8B84B"/>
@@ -209,27 +219,37 @@
   </div>
 </div>
 
+<!-- PANEL -->
 <div class="panel-overlay" id="overlay">
   <div class="panel" id="panel">
-    <button class="panel-close" id="panelCloseBtn">×</button>
+    <button class="panel-close" id="panelCloseBtn">x</button>
     <div class="panel-icon" id="panelIcon"></div>
     <div class="panel-title" id="panelTitle"></div>
     <div class="panel-desc" id="panelDesc"></div>
     <div class="panel-tags" id="panelTags"></div>
-    <a class="panel-link" id="panelLink" href="#" target="_blank">Visit →</a>
+    <a class="panel-link" id="panelLink" href="#" target="_blank">Visit -></a>
   </div>
 </div>
+
+<!-- EMAIL TOAST -->
+<div class="email-toast" id="emailToast">
+  <span class="addr" id="emailAddr"></span>
+  <button class="copy-btn" id="copyBtn">Copy</button>
+  <span class="copied" id="copiedMsg">Copied!</span>
+</div>
+
+<!-- FOOTER (no email address in HTML at all) -->
 <div class="footer">
   <div class="social-row">
     <a href="https://x.com/Jeswan22" target="_blank" class="social-btn">X</a>
     <a href="https://www.linkedin.com/in/jes-wan-04182792/" target="_blank" class="social-btn">LinkedIn</a>
-    <a href="mailto:wanyujie0122&#64;gmail.com" class="social-btn">Email</a>
+    <span class="social-btn" id="emailBtn">Email</span>
   </div>
-  <div class="footer-copy">© 2026 Jes</div>
+  <div class="footer-copy">&copy; 2026 Jes</div>
 </div>
 
 <script>
-// ===== ALL DATA =====
+// ===== PROJECT DATA =====
 var projects = {
   mumble_note: { icon:'\u{1F4D3}', title:'Mumble Note', color:'teal', desc:'Voice-first note-taking that captures your thoughts naturally. Speak your mind, get structured notes.', tags:['Voice AI','Productivity','Notes'], link:'https://www.mumblenote.com' },
   mumble_ai: { icon:'\u{1F916}', title:'Mumble AI', color:'blue', desc:'AI-powered voice intelligence platform. Meeting notes, voice notes, dictation, 3-in-one.', tags:['AI','Voice','Dictation','Skills'], link:'https://www.heymumble.com' },
@@ -247,7 +267,11 @@ function showPanel(key) {
   document.getElementById('panelDesc').textContent = p.desc;
   document.getElementById('panelLink').href = p.link;
   document.getElementById('panel').setAttribute('data-color', p.color);
-  document.getElementById('panelTags').innerHTML = p.tags.map(function(t){ return '<span class="panel-tag">'+t+'</span>'; }).join('');
+  var html = '';
+  for (var i = 0; i < p.tags.length; i++) {
+    html += '<span class="panel-tag">' + p.tags[i] + '</span>';
+  }
+  document.getElementById('panelTags').innerHTML = html;
   document.getElementById('overlay').classList.add('active');
 }
 
@@ -258,7 +282,10 @@ document.getElementById('panelCloseBtn').addEventListener('click', function() {
   document.getElementById('overlay').classList.remove('active');
 });
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') document.getElementById('overlay').classList.remove('active');
+  if (e.key === 'Escape') {
+    document.getElementById('overlay').classList.remove('active');
+    document.getElementById('emailToast').classList.remove('show');
+  }
 });
 
 // ===== TOOLTIP =====
@@ -269,24 +296,54 @@ function showTip(el, text, color) {
   tip.style.color = (color === 'amber' || color === 'teal') ? 'var(--bg)' : '#fff';
   var b = el.getBoundingClientRect();
   var r = document.querySelector('.room').getBoundingClientRect();
-  tip.style.left = (b.left + b.width/2 - r.left) + 'px';
+  tip.style.left = (b.left + b.width / 2 - r.left) + 'px';
   tip.style.top = (b.top - r.top - 8) + 'px';
   tip.classList.add('show');
 }
 function hideTip() { tip.classList.remove('show'); }
 
-// ===== BIND ALL [data-click] elements via JS (no inline handlers!) =====
-document.querySelectorAll('[data-click]').forEach(function(el) {
-  el.addEventListener('click', function(e) {
-    e.stopPropagation();
-    showPanel(this.getAttribute('data-click'));
+// ===== BIND ALL [data-click] via JS =====
+var clickEls = document.querySelectorAll('[data-click]');
+for (var i = 0; i < clickEls.length; i++) {
+  (function(el) {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showPanel(this.getAttribute('data-click'));
+    });
+    el.addEventListener('mouseenter', function() {
+      var t = this.getAttribute('data-tip');
+      var c = this.getAttribute('data-tip-color');
+      if (t) showTip(this, t, c);
+    });
+    el.addEventListener('mouseleave', hideTip);
+  })(clickEls[i]);
+}
+
+// ===== EMAIL (address built in JS, never in HTML) =====
+var emailToast = document.getElementById('emailToast');
+var emailParts = ['wanyujie0122', 'gm', 'ail.c', 'om'];
+var emailFull = emailParts[0] + '@' + emailParts[1] + emailParts[2] + emailParts[3];
+
+document.getElementById('emailBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  document.getElementById('emailAddr').textContent = emailFull;
+  document.getElementById('copiedMsg').style.display = 'none';
+  document.getElementById('copyBtn').style.display = '';
+  emailToast.classList.add('show');
+});
+
+document.getElementById('copyBtn').addEventListener('click', function() {
+  navigator.clipboard.writeText(emailFull).then(function() {
+    document.getElementById('copyBtn').style.display = 'none';
+    document.getElementById('copiedMsg').style.display = '';
+    setTimeout(function() { emailToast.classList.remove('show'); }, 1500);
   });
-  el.addEventListener('mouseenter', function() {
-    var tipText = this.getAttribute('data-tip');
-    var tipColor = this.getAttribute('data-tip-color');
-    if (tipText) showTip(this, tipText, tipColor);
-  });
-  el.addEventListener('mouseleave', hideTip);
+});
+
+document.addEventListener('click', function(e) {
+  if (!emailToast.contains(e.target) && e.target.id !== 'emailBtn') {
+    emailToast.classList.remove('show');
+  }
 });
 
 // ===== LAMP =====
@@ -331,22 +388,25 @@ document.getElementById('plantGroup').addEventListener('click', function(e) {
 // ===== CALENDAR =====
 (function() {
   var now = new Date();
-  document.getElementById('calMonth').textContent = now.toLocaleString('en',{month:'short'}).toUpperCase() + ' ' + now.getFullYear();
+  document.getElementById('calMonth').textContent = now.toLocaleString('en', {month:'short'}).toUpperCase() + ' ' + now.getFullYear();
   var grid = document.getElementById('calGrid');
   var firstDay = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
-  var daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  var daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   var today = now.getDate();
-  var baseX=535, baseY=198, colDx=8, colDy=4, rowDy=8, day=1;
-  for (var row=0; row<6 && day<=daysInMonth; row++) {
-    for (var col=0; col<7; col++) {
-      if (row===0 && col<firstDay) continue;
-      if (day>daysInMonth) break;
-      var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('cx', baseX + col*colDx);
-      c.setAttribute('cy', baseY + col*colDy + row*rowDy);
-      c.setAttribute('r', day===today ? '2.5' : '1.8');
-      c.setAttribute('fill', day===today ? '#B07BFF' : '#ccc');
-      if (day===today) { c.setAttribute('stroke','rgba(176,123,255,0.4)'); c.setAttribute('stroke-width','2'); }
+  var baseX = 535, baseY = 198, colDx = 8, colDy = 4, rowDy = 8, day = 1;
+  for (var row = 0; row < 6 && day <= daysInMonth; row++) {
+    for (var col = 0; col < 7; col++) {
+      if (row === 0 && col < firstDay) continue;
+      if (day > daysInMonth) break;
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', baseX + col * colDx);
+      c.setAttribute('cy', baseY + col * colDy + row * rowDy);
+      c.setAttribute('r', day === today ? '2.5' : '1.8');
+      c.setAttribute('fill', day === today ? '#B07BFF' : '#ccc');
+      if (day === today) {
+        c.setAttribute('stroke', 'rgba(176,123,255,0.4)');
+        c.setAttribute('stroke-width', '2');
+      }
       grid.appendChild(c);
       day++;
     }
@@ -356,9 +416,18 @@ document.getElementById('plantGroup').addEventListener('click', function(e) {
 // ===== PARTICLES =====
 (function() {
   var pEl = document.getElementById('particles');
-  for (var i=0; i<12; i++) {
+  for (var i = 0; i < 12; i++) {
     var p = document.createElement('div');
     p.className = 'particle';
-    p.style.left = Math.random()*100 + '%';
-    p.style.animationDuration = (10+Math.random()*15) + 's';
-    p.style.animationDelay = Math.random()*10 + 's';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (10 + Math.random() * 15) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    var s = 1 + Math.random() * 2;
+    p.style.width = s + 'px';
+    p.style.height = s + 'px';
+    pEl.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
