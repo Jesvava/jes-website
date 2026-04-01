@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar AI — Add events to Google Calendar in seconds</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #6C7BFF;
+    --blue-light: #E8EBFF;
+    --pink: #FFB8C6;
+    --yellow: #FFD96A;
+    --bg: #FAFBFF;
+    --text: #2D3142;
+    --text-soft: #6B7194;
+    --white: #fff;
+    --radius: 16px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(12px);
+    background: rgba(250,251,255,0.85);
+    border-bottom: 1px solid rgba(108,123,255,0.08);
+  }
+  .nav-logo {
+    font-weight: 900; font-size: 1.2rem; color: var(--blue);
+    text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+  }
+  .nav-logo span { font-size: 1.3rem; }
+  .nav-cta {
+    background: var(--blue); color: #fff;
+    padding: 0.5rem 1.2rem; border-radius: 10px;
+    text-decoration: none; font-weight: 700; font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(108,123,255,0.3); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 7rem 2rem 4rem;
+    background: linear-gradient(180deg, #E8EBFF 0%, var(--bg) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -20%; right: -10%;
+    width: 500px; height: 500px;
+    background: var(--pink); border-radius: 50%;
+    opacity: 0.15; filter: blur(80px);
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -10%; left: -5%;
+    width: 400px; height: 400px;
+    background: var(--yellow); border-radius: 50%;
+    opacity: 0.12; filter: blur(80px);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--white); border: 1px solid rgba(108,123,255,0.15);
+    border-radius: 100px; padding: 0.35rem 1rem;
+    font-size: 0.8rem; font-weight: 700; color: var(--blue);
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px rgba(108,123,255,0.08);
+    animation: fadeUp 0.6s 0.1s both;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.2rem;
+    animation: fadeUp 0.6s 0.2s both;
+  }
+  .hero h1 .accent { color: var(--blue); }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-soft);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.6s 0.3s both;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--blue); color: #fff;
+    padding: 0.9rem 2rem; border-radius: 12px;
+    text-decoration: none; font-weight: 800; font-size: 1rem;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(108,123,255,0.25);
+    animation: fadeUp 0.6s 0.4s both;
+  }
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(108,123,255,0.35);
+  }
+  .hero-cta svg { width: 20px; height: 20px; }
+  .hero-sub2 {
+    font-size: 0.8rem; color: var(--text-soft); margin-top: 0.8rem;
+    animation: fadeUp 0.6s 0.5s both;
+  }
+  .hero-img {
+    margin-top: 3rem;
+    max-width: 800px; width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    animation: fadeUp 0.8s 0.6s both;
+  }
+
+  /* FEATURES */
+  .features { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+  .feature {
+    display: flex; align-items: center; gap: 3rem;
+    margin-bottom: 5rem;
+  }
+  .feature:nth-child(even) { flex-direction: row-reverse; }
+  .feature-img {
+    flex: 1; min-width: 0;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    width: 100%;
+  }
+  .feature-text { flex: 1; }
+  .feature-text h2 {
+    font-size: 1.6rem; font-weight: 900;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  .feature-text p {
+    font-size: 1rem; line-height: 1.7;
+    color: var(--text-soft);
+  }
+  .feature-tag {
+    display: inline-block;
+    font-size: 0.7rem; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 0.25rem 0.7rem; border-radius: 100px;
+    margin-bottom: 0.75rem;
+  }
+  .tag-blue { background: var(--blue-light); color: var(--blue); }
+  .tag-pink { background: #FFE8EE; color: #E8577A; }
+  .tag-yellow { background: #FFF3D6; color: #C68A00; }
+  .tag-green { background: #E6F9F0; color: #1A9E5C; }
+
+  /* FEATURE LIST */
+  .feature-list {
+    padding: 3rem 2rem 5rem;
+    max-width: 800px; margin: 0 auto;
+    text-align: center;
+  }
+  .feature-list h2 {
+    font-size: 2rem; font-weight: 900; margin-bottom: 2.5rem;
+  }
+  .fl-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem; text-align: left;
+  }
+  .fl-item {
+    background: var(--white);
+    border: 1px solid rgba(108,123,255,0.08);
+    border-radius: 12px;
+    padding: 1.2rem;
+    transition: all 0.2s;
+  }
+  .fl-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  }
+  .fl-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  .fl-item h3 { font-size: 0.9rem; font-weight: 800; margin-bottom: 0.3rem; }
+  .fl-item p { font-size: 0.8rem; color: var(--text-soft); line-height: 1.5; }
+
+  /* CTA BOTTOM */
+  .cta-bottom {
+    text-align: center;
+    padding: 4rem 2rem 5rem;
+    background: linear-gradient(180deg, var(--bg) 0%, #E8EBFF 100%);
+  }
+  .cta-bottom h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 900; margin-bottom: 1rem;
+  }
+  .cta-bottom p {
+    color: var(--text-soft); font-size: 1.05rem;
+    max-width: 440px; margin: 0 auto 2rem; line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 0.78rem; color: var(--text-soft);
+  }
+  footer a { color: var(--blue); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(16px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: all 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .feature { flex-direction: column !important; gap: 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .features { padding: 3rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo"><span>📅</span> Calendar AI</a>
+  <a href="https://chromewebstore.google.com/detail/calendar-ai-text-screensh/jbceogdnbbhhhjeglpllfbdpcccfhkkd" target="_blank" class="nav-cta">Add to Chrome</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"/></svg>
+    Free Chrome Extension
+  </div>
+  <h1>Add events to<br>Google Calendar<br><span class="accent">in seconds</span></h1>
+  <p class="hero-sub">Type naturally, paste a screenshot, or select text on any webpage. Calendar AI understands what you mean and creates the event instantly.</p>
+  <a href="https://chromewebstore.google.com/detail/calendar-ai-text-screensh/jbceogdnbbhhhjeglpllfbdpcccfhkkd" target="_blank" class="hero-cta">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    Add to Chrome — It's Free
+  </a>
+  <p class="hero-sub2">Works with any Google Calendar account</p>
+  <img src="hero.png" alt="Calendar AI interface" class="hero-img">
+</section>
+
+<section class="features">
+  <div class="feature reveal">
+    <img src="smart-detect.png" alt="Smart detection" class="feature-img">
+    <div class="feature-text">
+      <span class="feature-tag tag-blue">Smart Detection</span>
+      <h2>Understands topics, times, and people</h2>
+      <p>Type "Call Larissa 5pm" and Calendar AI figures out the title, date, time, and even sends the invite. No more clicking through forms.</p>
+    </div>
+  </div>
+
+  <div class="feature reveal">
+    <img src="one-click.png" alt="One click meetings" class="feature-img">
+    <div class="feature-text">
+      <span class="feature-tag tag-pink">Instant Meetings</span>
+      <h2>One click to start a Google Meet</h2>
+      <p>Start a quick meeting or join an upcoming one directly from the extension. Open Google Calendar with a single click.</p>
+    </div>
+  </div>
+
+  <div class="feature reveal">
+    <img src="contacts.png" alt="Frequent contacts" class="feature-img">
+    <div class="feature-text">
+      <span class="feature-tag tag-yellow">Frequent Contacts</span>
+      <h2>Save contacts, auto-fill emails</h2>
+      <p>Add your frequent contacts once. Mention their name and Calendar AI auto-fills their email and sends the invite.</p>
+    </div>
+  </div>
+</section>
+
+<section class="feature-list">
+  <h2 class="reveal">Everything you need</h2>
+  <div class="fl-grid">
+    <div class="fl-item reveal"><div class="fl-icon">✏️</div><h3>Natural Language</h3><p>Type events the way you think. No rigid formats.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">🖼️</div><h3>Screenshot Support</h3><p>Paste a screenshot of any invite or message.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">🔄</div><h3>Recurring Events</h3><p>"Gym every Mon, Wed, Fri at 7pm" just works.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">📋</div><h3>Clipboard Magic</h3><p>Copy event info, open extension — auto-detected.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">🖱️</div><h3>Right-Click Menu</h3><p>Select text on any page, right-click, add to calendar.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">✏️</div><h3>Edit with Words</h3><p>Modify or delete events by describing the change.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">🔑</div><h3>Multiple AI Providers</h3><p>OpenAI, Gemini, or Claude. Or use free, no setup.</p></div>
+    <div class="fl-item reveal"><div class="fl-icon">🔒</div><h3>Privacy First</h3><p>Data stays local. No event storage. Keys on your device.</p></div>
+  </div>
+</section>
+
+<section class="cta-bottom">
+  <h2 class="reveal">Ready to save time?</h2>
+  <p class="reveal">Stop clicking through calendar forms. Just say what you want.</p>
+  <a href="https://chromewebstore.google.com/detail/calendar-ai-text-screensh/jbceogdnbbhhhjeglpllfbdpcccfhkkd" target="_blank" class="hero-cta reveal">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    Add to Chrome — It's Free
+  </a>
+</section>
+
+<footer>
+  <p>Built by <a href="/">Jes</a> &middot; <a href="https://x.com/Jeswan22" target="_blank">Follow on X</a></p>
+</footer>
+
+<script>
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+var els = document.querySelectorAll('.reveal');
+for (var i = 0; i < els.length; i++) observer.observe(els[i]);
+</script>
+
+</body>
+</html>
